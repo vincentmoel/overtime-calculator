@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUsersTable extends Migration
+class CreateOvertimeGroupsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,15 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('overtime_groups', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id');
+            $table->string('month');
+            $table->string('year');
             $table->string('name');
-            $table->string('username')->unique();
-            $table->string('password');
+            $table->integer('transport');
+            $table->integer('meal');
+            $table->boolean('is_sunday');
             $table->timestamps();
         });
     }
@@ -29,6 +33,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('overtime_groups');
     }
 }
