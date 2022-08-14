@@ -14,7 +14,7 @@
 </head>
 
 <body>
-    <div class="container p-5">
+    <div style="min-width: 21cm; max-width: 21cm;">
         <header>
             <h3 class="text-center">Lembur Bulan {{ $informations['period'] }}</h3>
         </header>
@@ -26,7 +26,67 @@
                 </span>
             </div>
 
-            <div>
+            <div style="min-width: 21cm">
+                <div class="d-flex">
+                    <div class="flex-fill p-0 border border-dark p-2 text-center" style="min-width: 210px; max-width:210px">
+                        Nama Kegiatan
+                    </div>
+                    <div class="flex-fill p-0 border border-dark p-2 text-center" style="min-width: 252px; max-width:252px">
+                        Date/Time
+                    </div>
+                    <div class="flex-fill p-0 border border-dark p-2 text-center" style="min-width: 100px; max-width:100px">
+                        Lembur
+                    </div>
+                    <div class="flex-fill p-0 border border-dark p-2 text-center" style="min-width: 80px; max-width:80px">
+                        Uang
+                    </div>
+                    <div class="flex-fill p-0 border border-dark p-2 text-center">
+                        Transport/Makan
+                    </div>
+                </div>
+                <div class="d-flex">
+                    <div class="p-3 border border-dark text-center" style="min-width: 210px">
+                        Ibadah Minggu ke 1
+                    </div>
+                    <div class="" style="min-width: 252px">
+                        <div class="p-1 border border-dark text-center">
+                            12/12/2022 12:12:12 AM
+                        </div>
+                        <div class="p-1 border border-dark text-center">
+                            12/12/2022 12:12:12 AM
+                        </div>
+                        <div class="p-1 border border-dark text-center">
+                            12/12/2022 12:12:12 AM
+                        </div>
+                        <div class="p-1 border border-dark text-center">
+                            12/12/2022 12:12:12 AM
+                        </div>
+                        <div class="p-1 border border-dark text-center">
+                            12/12/2022 12:12:12 AM
+                        </div>
+                        <div class="p-1 border border-dark text-center">
+                            12/12/2022 12:12:12 AM
+                        </div>
+                    </div>
+                    <div class="p-3 border border-dark" style="min-width: 100px">
+                        12:12:12
+                    </div>
+                    <div class="p-3 border border-dark" style="min-width: 80px">
+                        99999
+                    </div>
+                    <div class="w-100">
+                        <div class="p-3 h-50 w-100 border border-dark text-center">
+                            4000
+                        </div>
+                        <div class="p-3 h-50 w-100 border border-dark text-center">
+                            6000
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            {{-- <div>
                 <table class="table table-bordered border-dark">
                     <thead>
                         <tr class="text-center" style="background-color:#D9D9D9;">
@@ -38,42 +98,39 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td rowspan="2">Ibadah HUT</td>
-                            <td>6/12/20222 5:00:00 AM</td>
-                            <td rowspan="2">5:20:01</td>
-                            <td rowspan="2">Rp41.000</td>
-                            <td>4000</td>
-                        </tr>
-                        <tr>
-                            <td>6/12/20222 11:00:00 AM</td>
-                            <td>6000</td>
-                        </tr>
+                        @foreach ($overtimes as $overtime)
+                            <tr>
+                                <td rowspan="6">{{ $overtime['name'] }}</td>
+                                <td>6/12/20222 6:00:00 AM</td>
+                                <td rowspan="6">{{ $overtime['overtime'] }}</td>
+                                <td rowspan="6">{{ $overtime['money'] }}</td>
+                                <td rowspan="1">4000</td>
+                            </tr>
+                            <tr>
+                                <td>6/12/20222 11:00:00 AM</td>
+                                <td rowspan="1">6000</td>
+                            </tr>
+                            <tr>
+                                <td>6/12/20222 11:00:00 AM</td>
+                                <td rowspan="1">6000</td>
+                            </tr>
+                            <tr>
+                                <td>6/12/20222 11:00:00 AM</td>
+                                <td rowspan="1">6000</td>
+                            </tr>
+                            <tr>
+                                <td>6/12/20222 11:00:00 AM</td>
+                                <td rowspan="1">6000</td>
+                            </tr>
+                            <tr>
+                                <td>6/12/20222 11:00:00 AM</td>
+                                <td rowspan="1">6000</td>
+                            </tr>
+                        @endforeach
 
-
-                        {{-- <tr>
-                            <td rowspan="4">Ibadah Minggu</td>
-                            <td>6/12/20222 5:00:00 AM</td>
-                            <td rowspan="4">5:20:01</td>
-                            <td rowspan="4">Rp41.000</td>
-                            <td>4000</td>
-                        </tr>
-                        <tr>
-                            <td>6/12/20222 11:00:00 AM</td>
-                            <td>6000</td>
-                        </tr>
-                        <tr>
-                            <td>6/12/20222 11:00:00 AM</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>6/12/20222 11:00:00 AM</td>
-                            <td></td>
-                            
-                        </tr> --}}
                     </tbody>
                 </table>
-            </div>
+            </div> --}}
         </div>
 
     </div>
@@ -84,7 +141,8 @@
 </html>
 
 <style>
-    td,th {
+    td,
+    th {
         text-align: center;
         vertical-align: middle;
     }
