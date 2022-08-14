@@ -26,64 +26,67 @@
                 </span>
             </div>
 
-            <div style="min-width: 21cm">
+            <div class="mt-3" style="min-width: 21cm">
                 <div class="d-flex">
-                    <div class="flex-fill p-0 border border-dark p-2 text-center" style="min-width: 210px; max-width:210px">
+                    <div class="flex-fill p-0 border border-dark p-2 text-center"
+                        style="min-width: 210px; max-width:210px">
                         Nama Kegiatan
                     </div>
-                    <div class="flex-fill p-0 border border-dark p-2 text-center" style="min-width: 252px; max-width:252px">
+                    <div class="flex-fill p-0 border border-dark p-2 text-center"
+                        style="min-width: 252px; max-width:252px">
                         Date/Time
                     </div>
-                    <div class="flex-fill p-0 border border-dark p-2 text-center" style="min-width: 100px; max-width:100px">
+                    <div class="flex-fill p-0 border border-dark p-2 text-center"
+                        style="min-width: 100px; max-width:100px">
                         Lembur
                     </div>
-                    <div class="flex-fill p-0 border border-dark p-2 text-center" style="min-width: 80px; max-width:80px">
+                    <div class="flex-fill p-0 border border-dark p-2 text-center"
+                        style="min-width: 80px; max-width:80px">
                         Uang
                     </div>
                     <div class="flex-fill p-0 border border-dark p-2 text-center">
                         Transport/Makan
                     </div>
                 </div>
-                <div class="d-flex">
-                    <div class="p-3 border border-dark text-center" style="min-width: 210px">
-                        Ibadah Minggu ke 1
-                    </div>
-                    <div class="" style="min-width: 252px">
-                        <div class="p-1 border border-dark text-center">
-                            12/12/2022 12:12:12 AM
+                @foreach ($overtimes as $overtime)
+                    <div class="d-flex">
+                        <div class="p-3 border border-dark text-center" style="min-width: 210px">
+                            {{ $overtime['name'] }}
                         </div>
-                        <div class="p-1 border border-dark text-center">
-                            12/12/2022 12:12:12 AM
+                        <div class="" style="min-width: 252px">
+                            @foreach ($overtime['detail'] as $time)
+                                <div class="p-1 border border-dark text-center">
+                                    {{ $time['from'] }}
+                                </div>
+                                <div class="p-1 border border-dark text-center">
+                                    {{ $time['to'] }}
+                                </div>
+                            @endforeach
                         </div>
-                        <div class="p-1 border border-dark text-center">
-                            12/12/2022 12:12:12 AM
-                        </div>
-                        <div class="p-1 border border-dark text-center">
-                            12/12/2022 12:12:12 AM
-                        </div>
-                        <div class="p-1 border border-dark text-center">
-                            12/12/2022 12:12:12 AM
-                        </div>
-                        <div class="p-1 border border-dark text-center">
-                            12/12/2022 12:12:12 AM
-                        </div>
-                    </div>
-                    <div class="p-3 border border-dark" style="min-width: 100px">
-                        12:12:12
-                    </div>
-                    <div class="p-3 border border-dark" style="min-width: 80px">
-                        99999
-                    </div>
-                    <div class="w-100">
-                        <div class="p-3 h-50 w-100 border border-dark text-center">
-                            4000
-                        </div>
-                        <div class="p-3 h-50 w-100 border border-dark text-center">
-                            6000
-                        </div>
-                    </div>
 
-                </div>
+                        <div class="p-3 border border-dark" style="min-width: 100px">
+                            {{ $overtime['overtime'] }}
+                        </div>
+                        <div class="p-3 border border-dark" style="min-width: 80px">
+                            {{ $overtime['money'] }}
+
+                        </div>
+                        <div class="w-100">
+                            <div class="p-3 h-50 w-100 border border-dark text-center">
+                                @if ($overtime['transport'] != 0)
+                                    {{ $overtime['transport'] }}
+                                @endif
+                            </div>
+                            <div class="p-3 h-50 w-100 border border-dark text-center">
+                                @if ($overtime['meal'] != 0)
+                                    {{ $overtime['meal'] }}
+                                @endif
+                            </div>
+                        </div>
+
+                    </div>
+                @endforeach
+
             </div>
 
             {{-- <div>
