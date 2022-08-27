@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OvertimeGroupController;
 use Illuminate\Support\Facades\Route;
 
@@ -13,5 +14,15 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/',[HomeController::class,'index'])->middleware('revalidate');
+Route::post('/login',[AuthController::class,'authenticate']);
+Route::post('/logout', [AuthController::class, 'logout']);
+Route::get('/logout', function () { return redirect('/'); });
+
+Route::group(['middleware' => ['guest', 'revalidate']], function () {
+    Route::get('/login',[AuthController::class,'index'])->name('login');
+    
+});
 
 Route::get('/', [OvertimeGroupController::class,'index']);
