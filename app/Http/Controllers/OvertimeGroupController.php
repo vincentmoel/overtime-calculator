@@ -170,12 +170,13 @@ class OvertimeGroupController extends Controller
         return $overtimeMoney + $transportMoney + $mealMoney; 
     }
 
-    public function addEvent()
+    public function addEvent($increment)
     {
         $config = Config::where('functionality','in-form')->get();
 
         return view('overtime.eventfield',[
-            "configs"        => $config
+            "configs"        => $config,
+            "increment"      => $increment
         ]);
     }
     

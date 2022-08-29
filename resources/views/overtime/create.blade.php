@@ -43,7 +43,7 @@
         <button class="btn btn-success">Submit</button>
     </div>
 
-    <div id="event-field">
+    <div id="events-wrapper">
         @include('overtime.eventfield')
     </div>
 
@@ -58,13 +58,17 @@
 
 
     <script>
+        var increment = 2;
+
+        // Nambah Event
         $("#add-event").click(function(e) {
             e.preventDefault();
             $.ajax({
                 type: "GET",
-                url: "/overtimes/jquery/add-event",
+                url: "/overtimes/jquery/add-event/"+increment,
                 success: function(result) {
-                    $("#event-field").append(result);
+                    increment++;
+                    $("#events-wrapper").append(result);
                 },
                 error: function(result) {
                     alert('Error, try again!');
@@ -72,18 +76,30 @@
             });
         });
         
-        $("#add-overtime").click(function(e) {
-            e.preventDefault();
+        function addOvertime(incrementOvertime)
+        {
+            // e.preventDefault();
             $.ajax({
                 type: "GET",
                 url: "/overtimes/jquery/add-overtime",
                 success: function(result) {
-                    $("#overtime-field").append(result);
+                    $("#overtime-wrapper-"+incrementOvertime).append(result);
                 },
                 error: function(result) {
                     alert('Error, try again!');
                 }
             });
-        });
+        }
+
+        function deleteEvent(incrementEvent)
+        {
+            $("#event-wrapper-"+incrementEvent).remove();
+        }
+        
+        function deleteOvertime(incrementOvertime)
+        {
+            $('#overtime-wrapper-'+incrementOvertime).children().last().remove();
+        }
+     
     </script>
 @endsection

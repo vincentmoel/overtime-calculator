@@ -33,5 +33,5 @@ Route::get('/', function(){
 
 Route::get('/overtimes', [OvertimeGroupController::class,'index']);
 Route::get('/overtimes/create', [OvertimeGroupController::class,'create']);
-Route::get('/overtimes/jquery/add-event', [OvertimeGroupController::class,'addEvent']);
+Route::get('/overtimes/jquery/add-event/{increment}', [OvertimeGroupController::class,'addEvent']);
 Route::get('/overtimes/jquery/add-overtime', [OvertimeGroupController::class,'addOvertime']);
