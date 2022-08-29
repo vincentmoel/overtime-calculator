@@ -25,4 +25,13 @@ Route::group(['middleware' => ['guest', 'revalidate']], function () {
     
 });
 
-Route::get('/', [OvertimeGroupController::class,'index']);
+Route::get('/result', [OvertimeGroupController::class,'result']);
+Route::get('/', function(){
+    return view('home');
+});
+
+
+Route::get('/overtimes', [OvertimeGroupController::class,'index']);
+Route::get('/overtimes/create', [OvertimeGroupController::class,'create']);
+Route::get('/overtimes/jquery/add-event', [OvertimeGroupController::class,'addEvent']);
+Route::get('/overtimes/jquery/add-overtime', [OvertimeGroupController::class,'addOvertime']);

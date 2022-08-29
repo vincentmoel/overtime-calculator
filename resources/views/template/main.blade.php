@@ -27,17 +27,39 @@
     <link href="/assets/css/main.css?ver=<?= filemtime('assets/css/main.css') ?>" rel="stylesheet">
     <link href="/assets/css/style.css?ver=<?= filemtime('assets/css/style.css') ?>" rel="stylesheet">
 
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+    
+    @if(!Route::is('login')) 
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="/assets/sidebar/css/style.css">
+    @endif
+
+
 </head>
 
-<body class="bg-dark">
+<body class="@if(Route::is('login')) bg-dark @endif">
 
+    @if(!Route::is('login')) 
+        <div class="d-flex align-items-stretch">
 
-    <main class="" id="main">
-        <div class="container-fluid">
-            @yield('container')
+            @include('template.partials.sidebar')
+
+            <!-- Page Content  -->
+            <div id="content" class="p-4 p-md-5 pt-5">
+                @yield('container')
+            </div>
         </div>
-    </main>
-
+    @else
+        <main class="" id="main">
+            <div class="container-fluid">
+                @yield('container')
+            </div>
+        </main>
+    
+    @endif
 
     <!-- Vendor JS Files -->
     <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -45,7 +67,12 @@
     <!-- Template Main JS File -->
     <script src="/assets/js/main.js"></script>
 
+
+
+
+    
 </body>
+
 
 <style>
     footer {
@@ -55,5 +82,7 @@
     }
 
 </style>
+
+
 
 </html>

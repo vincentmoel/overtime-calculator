@@ -15,6 +15,87 @@ class OvertimeGroupController extends Controller
      */
     public function index()
     {
+        $overtimeGroups = OvertimeGroup::where('user_id',auth()->user()->id)->groupBy('month','year')->get();
+        return view('overtime.index',[
+            "overtimeGroups" => $overtimeGroups,
+        ]);
+    }
+
+    
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        $config = Config::where('functionality','in-form')->get();
+
+        return view('overtime.create',[
+            "configs"        => $config
+        ]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\OvertimeGroup  $overtimeGroup
+     * @return \Illuminate\Http\Response
+     */
+    public function show(OvertimeGroup $overtimeGroup)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\OvertimeGroup  $overtimeGroup
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(OvertimeGroup $overtimeGroup)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\OvertimeGroup  $overtimeGroup
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, OvertimeGroup $overtimeGroup)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\OvertimeGroup  $overtimeGroup
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(OvertimeGroup $overtimeGroup)
+    {
+        //
+    }
+
+
+    public function result()
+    {
         $overtimeGroups = OvertimeGroup::where('user_id',1)
                             ->where('month',"Agustus")
                             ->where('year',2022)
@@ -85,74 +166,21 @@ class OvertimeGroupController extends Controller
 
     public function getTotalOvertimeMoney($overtimeMoneyPerHour, $totalOvertime, $transportMoney, $mealMoney)
     {
-        
         $overtimeMoney = floor(($overtimeMoneyPerHour / 3600) * $totalOvertime);
         return $overtimeMoney + $transportMoney + $mealMoney; 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function addEvent()
     {
-        //
-    }
+        $config = Config::where('functionality','in-form')->get();
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+        return view('overtime.eventfield',[
+            "configs"        => $config
+        ]);
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\OvertimeGroup  $overtimeGroup
-     * @return \Illuminate\Http\Response
-     */
-    public function show(OvertimeGroup $overtimeGroup)
+    
+    public function addOvertime()
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\OvertimeGroup  $overtimeGroup
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(OvertimeGroup $overtimeGroup)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\OvertimeGroup  $overtimeGroup
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, OvertimeGroup $overtimeGroup)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\OvertimeGroup  $overtimeGroup
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(OvertimeGroup $overtimeGroup)
-    {
-        //
+        return view('overtime.timefield');
     }
 }

@@ -16,6 +16,7 @@ class ConfigSeeder extends Seeder
     {
         Config::create([
             "name"          => "Jam Kerja Gereja",
+            "alias"         => "Is Sunday",
             "slug"          => "working-hour",
             "functionality" => "in-form",
             "value"         => 6,
@@ -28,6 +29,24 @@ class ConfigSeeder extends Seeder
             "functionality" => "information",
             "value"         => 7000,
             "description"   => "Uang lembur perjam dalam rupiah untuk acuan dalam menghitung uang lembur"
+        ]);
+        
+        Config::create([
+            "name"          => "Uang Transport",
+            "alias"         => "Transport",
+            "slug"          => "transport-money",
+            "functionality" => "in-form",
+            "value"         => 5000,
+            "description"   => "Uang transport"
+        ]);
+
+        Config::create([
+            "name"          => "Uang Makan",
+            "alias"         => "Meal",
+            "slug"          => "meal-money",
+            "functionality" => "in-form",
+            "value"         => 7000,
+            "description"   => "Uang makan"
         ]);
 
 
