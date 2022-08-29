@@ -40,7 +40,7 @@
     <div class="mb-3">
 
         <button class="btn btn-primary" id="add-event"><i class="bi bi-plus-circle"></i> Add Event</button>
-        <button class="btn btn-success">Submit</button>
+        <button class="btn btn-success" id="btn-submit">Submit</button>
     </div>
 
     <div id="events-wrapper">
@@ -65,7 +65,7 @@
             e.preventDefault();
             $.ajax({
                 type: "GET",
-                url: "/overtimes/jquery/add-event/"+increment,
+                url: "/overtimes/jquery/add-event/" + increment,
                 success: function(result) {
                     increment++;
                     $("#events-wrapper").append(result);
@@ -75,15 +75,15 @@
                 }
             });
         });
-        
-        function addOvertime(incrementOvertime)
-        {
+
+
+        function addOvertime(incrementOvertime) {
             // e.preventDefault();
             $.ajax({
                 type: "GET",
                 url: "/overtimes/jquery/add-overtime",
                 success: function(result) {
-                    $("#overtime-wrapper-"+incrementOvertime).append(result);
+                    $("#overtime-wrapper-" + incrementOvertime).append(result);
                 },
                 error: function(result) {
                     alert('Error, try again!');
@@ -91,15 +91,50 @@
             });
         }
 
-        function deleteEvent(incrementEvent)
-        {
-            $("#event-wrapper-"+incrementEvent).remove();
+        function deleteEvent(incrementEvent) {
+            $("#event-wrapper-" + incrementEvent).remove();
         }
-        
-        function deleteOvertime(incrementOvertime)
-        {
-            $('#overtime-wrapper-'+incrementOvertime).children().last().remove();
+
+        function deleteOvertime(incrementOvertime) {
+            $('#overtime-wrapper-' + incrementOvertime).children().last().remove();
         }
-     
+
+        $("#btn-submit").click(function(e) {
+            var arrSubmit = {};
+            $("*[id^='event-wrapper-']").each(function() {
+                arrTemp = {};
+
+                arrTemp['name'] = $(this).find('input[name="nameEvent"]').val();
+
+                @foreach ($configs as $config)
+                    arrTemp["{{ $config->slug }}"] = $(this).find('input[name="{{ $config->slug }}"]').is(':checked');
+                @endforeach
+
+                arrTemp['overtimes'] = overtimeParser(this);
+
+                console.log(arrTemp);
+            });
+        });
+
+        function overtimeParser(element) {
+            arrOvertime = [];
+
+            arrFrom = [];
+            $(element).find('input[name="from[]"]').each(function() {
+                arrFrom.push(this.value);
+            });
+
+            arrTo = [];
+            $(element).find('input[name="to[]"]').each(function() {
+                arrTo.push(this.value);
+            });
+
+            for(let i = 0; i < arrFrom.length; i++)
+            {
+                arrOvertime.push({"from" : arrFrom[i], "to" : arrTo[i]})
+            }
+
+            return arrOvertime;
+        }
     </script>
 @endsection

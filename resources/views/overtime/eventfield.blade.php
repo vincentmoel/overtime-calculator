@@ -10,7 +10,7 @@
         </div>
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Name</label>
-            <input type="text" class="form-control">
+            <input type="text" class="form-control" name="nameEvent">
         </div>
 
 
@@ -20,7 +20,7 @@
 
                 @foreach ($configs as $config)
                     <div class="form-check me-3">
-                        <input class="form-check-input" type="checkbox" value="" id="{{ $config->slug ."-". $increment }}">
+                        <input class="form-check-input" type="checkbox" value="true" id="{{ $config->slug ."-". $increment }}" name="{{ $config->slug }}">
                         <label class="form-check-label" for="{{ $config->slug ."-". $increment }}">
                             {{ $config->alias }}
                         </label>
