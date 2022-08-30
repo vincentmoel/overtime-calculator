@@ -10,7 +10,7 @@
         </div>
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Name</label>
-            <input type="text" class="form-control" name="nameEvent">
+            <input type="text" class="form-control" name="nameEvent" required>
         </div>
 
 
@@ -30,7 +30,7 @@
             </div>
         </div>
 
-        <button class="btn btn-outline-dark mb-3" id="add-overtime-{{ $increment }}" onclick="deleteOvertime({{ $increment }})">Delete Overtime</button>
+        <button class="btn btn-outline-danger mb-3" id="add-overtime-{{ $increment }}" onclick="deleteOvertime({{ $increment }})">Delete Overtime</button>
         <button class="btn btn-outline-success mb-3" id="add-overtime-{{ $increment }}" onclick="addOvertime({{ $increment }})">Add Overtime</button>
 
         <div id="overtime-wrapper-{{ $increment }}">

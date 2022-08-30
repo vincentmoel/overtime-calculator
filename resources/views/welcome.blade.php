@@ -72,12 +72,12 @@
 
                         </div>
                         <div class="w-100">
-                            <div class="p-3 h-50 w-100 border border-dark text-center">
+                            <div class="p-1 h-50 w-100 border border-dark text-center">
                                 @if ($overtime['transport'] != 0)
                                     {{ $overtime['transport'] }}
                                 @endif
                             </div>
-                            <div class="p-3 h-50 w-100 border border-dark text-center">
+                            <div class="p-1 h-50 w-100 border border-dark text-center">
                                 @if ($overtime['meal'] != 0)
                                     {{ $overtime['meal'] }}
                                 @endif

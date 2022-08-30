@@ -22,7 +22,7 @@
                     @endphp
 
                     @foreach ($monthArr as $month)
-                        <option value="{{ $month }}" @if ($month == $currentMonth) selected @endif>
+                        <option value="{{ $month }}" @if ($month == $data[0]['month']) selected @endif>
                             {{ $month }}</option>
                     @endforeach
                 </select>
@@ -30,7 +30,7 @@
             </div>
             <div class="mb-3">
                 <label for="year" class="form-label">Year</label>
-                <input type="number" id="year" name="year" class="form-control" value="{{ date('Y') }}"
+                <input type="number" id="year" name="year" class="form-control" value="{{ $data[0]['year'] }}"
                     style="max-width: 150px" required>
             </div>
             <input type="hidden" name="json" value="">
@@ -45,7 +45,65 @@
 
 
     <div id="events-wrapper">
-        @include('overtime.eventfield')
+        @php
+            $increment = 1
+        @endphp
+        @foreach($data as $d)
+            <div class="card mb-3" id="event-wrapper-{{ $increment }}" style="background-color: #FAFAFA">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h4>Event</h4>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteEvent({{ $increment }})">Delete</button>
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Name</label>
+                        <input type="text" class="form-control" name="nameEvent" value="{{ $d['name'] }}" required>
+                    </div>
+            
+            
+                    <div class="mb-3">
+                        Config :
+                        <div class="d-flex">
+            
+                            @foreach ($configs as $config)
+                                <div class="form-check me-3">
+                                    <input class="form-check-input" type="checkbox" value="true" id="{{ $config->slug ."-". $increment }}" name="{{ $config->slug }}" @if($d[$config->slug]) checked @endif>
+                                    <label class="form-check-label" for="{{ $config->slug ."-". $increment }}">
+                                        {{ $config->alias }}
+                                    </label>
+                                </div>
+                            @endforeach
+            
+                        </div>
+                    </div>
+            
+                    <button class="btn btn-outline-danger mb-3" id="add-overtime-{{ $increment }}" onclick="deleteOvertime({{ $increment }})">Delete Overtime</button>
+                    <button class="btn btn-outline-success mb-3" id="add-overtime-{{ $increment }}" onclick="addOvertime({{ $increment }})">Add Overtime</button>
+            
+                    <div id="overtime-wrapper-{{ $increment }}">
+                        @foreach($d['overtimes'] as $overtime)
+                            <div class="time-wrapper mb-2">
+                                <div class="separator mx-auto mb-3"></div>
+                                <div class="d-flex justify-content-center">
+                                    <div class="mb-3 me-3">
+                                        <label for="from" class="form-label">From</label>
+                                        <input type="text" id="from" name="from[]" class="form-control" value="{{ $overtime['from'] }}" style="max-width: 300px" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="to" class="form-label">To</label>
+                                        <input type="text" id="to" class="form-control" name="to[]" value="{{ $overtime['to'] }}" style="max-width: 300px" required>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+            
+                </div>
+            </div>
+            @php
+                $increment++;
+            @endphp
+        @endforeach
     </div>
 
 
@@ -59,7 +117,7 @@
 
 
     <script>
-        var increment = 2;
+        var increment = {{ $increment }};
 
         // Nambah Event
         $("#add-event").click(function(e) {

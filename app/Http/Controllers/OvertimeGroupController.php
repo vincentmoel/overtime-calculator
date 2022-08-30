@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Config;
+use App\Models\Overtime;
 use App\Models\OvertimeGroup;
 use Illuminate\Http\Request;
 
@@ -45,7 +46,35 @@ class OvertimeGroupController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'month' => 'required',
+            'year'  => 'required|numeric',
+            'json'  => 'required'
+        ]);
+
+        foreach(json_decode($request->json) as $detail)
+        {
+            $overtimeGroup = OvertimeGroup::create([
+                "user_id"   => auth()->user()->id,
+                "month"     => $request->month,
+                "year"      => $request->year,
+                "name"      => $detail->name,
+                "transport" => $detail->transport_money ? 7000 : 0 ,
+                "meal"      => $detail->meal_money ? 5000 : 0,
+                "is_sunday" => $detail->working_hour,
+            ]);
+
+            foreach($detail->overtimes as $overtime)
+            {
+                Overtime::create([
+                    "overtime_group_id" => $overtimeGroup->id,
+                    "from"              => $overtime->from,
+                    "to"                => $overtime->to,
+                ]);
+            }
+        }
+
+        return redirect('/overtimes');
     }
 
     /**
@@ -67,7 +96,44 @@ class OvertimeGroupController extends Controller
      */
     public function edit(OvertimeGroup $overtimeGroup)
     {
-        //
+        $configs = Config::where('functionality','in-form')->get();
+
+        $arrOvertimes = [];
+        $overtimes = OvertimeGroup::where('month',$overtimeGroup->month)->get();
+
+
+        // dd($overtimeGroup);
+        foreach($overtimes as $overtime)
+        {
+            $arrTemp = [];
+            $arrTemp['name'] = $overtime->name;
+            $arrTemp['month'] = $overtime->month;
+            $arrTemp['year'] = $overtime->year;
+            $arrTemp['working_hour'] = $overtime->is_sunday;
+            $arrTemp['transport_money'] = $overtime->transport;
+            $arrTemp['meal_money'] = $overtime->meal;
+
+            $detailOvertime = Overtime::where('overtime_group_id',$overtime->id)->get();
+
+            $arrOvertimeTemp = [];
+            foreach($detailOvertime as $detail)
+            {
+                $arrDetail = [];
+                $arrDetail['from'] = $detail->from;
+                $arrDetail['to'] = $detail->to;
+                array_push($arrOvertimeTemp,$arrDetail);
+            }
+
+            $arrTemp['overtimes'] = $arrOvertimeTemp;
+
+            array_push($arrOvertimes, $arrTemp);
+        }
+
+        // dd($arrOvertimes);
+        return view('overtime.edit',[
+            "data"      => $arrOvertimes,
+            "configs"    => $configs
+        ]);
     }
 
     /**
@@ -156,7 +222,7 @@ class OvertimeGroupController extends Controller
         
         if($isSunday)
         {
-            $workingHour = Config::where('slug','working-hour')->first();
+            $workingHour = Config::where('slug','working_hour')->first();
             // dd($totalTime - ($workingHour->value*3600));
             $totalTime -= ($workingHour->value*3600);
         }
