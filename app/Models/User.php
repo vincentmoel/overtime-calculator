@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
@@ -19,6 +20,19 @@ class User extends Authenticatable
         'username',
         'password',
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+
+        self::creating(function($model){
+            $model->password = Hash::make($model->password); 
+        });
+
+        self::updating(function($model){
+            $model->password = Hash::make($model->password); 
+        });
+    }
 
     /**
      * The attributes that should be hidden for arrays.

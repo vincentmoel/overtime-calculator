@@ -14,7 +14,10 @@ class ConfigController extends Controller
      */
     public function index()
     {
-        //
+        $configs = Config::get();
+        return view('config.index',[
+            'configs'   => $configs
+        ]);
     }
 
     /**
@@ -69,7 +72,14 @@ class ConfigController extends Controller
      */
     public function update(Request $request, Config $config)
     {
-        //
+        $data = $request->validate([
+            "value" => 'required'
+        ]);
+
+        $config->update($data);
+
+        return redirect('/configs');
+
     }
 
     /**

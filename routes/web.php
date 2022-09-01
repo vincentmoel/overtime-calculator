@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ConfigController;
 use App\Http\Controllers\OvertimeGroupController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,25 +17,43 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/',[HomeController::class,'index'])->middleware('revalidate');
-Route::post('/login',[AuthController::class,'authenticate']);
-Route::post('/logout', [AuthController::class, 'logout']);
-Route::get('/logout', function () { return redirect('/'); });
+Route::get('/', [HomeController::class, 'index'])->middleware('revalidate');
+Route::post('/login', [AuthController::class, 'authenticate']);
+
 
 Route::group(['middleware' => ['guest', 'revalidate']], function () {
-    Route::get('/login',[AuthController::class,'index'])->name('login');
-    
-});
-
-Route::get('/result', [OvertimeGroupController::class,'result']);
-Route::get('/', function(){
-    return view('home');
+    Route::get('/login', [AuthController::class, 'index'])->name('login');
 });
 
 
-Route::get('/overtimes', [OvertimeGroupController::class,'index']);
-Route::get('/overtimes/create', [OvertimeGroupController::class,'create']);
-Route::post('/overtimes/store', [OvertimeGroupController::class,'store']);
-Route::get('/overtimes/{overtimeGroup}/edit', [OvertimeGroupController::class,'edit']);
-Route::get('/overtimes/jquery/add-event/{increment}', [OvertimeGroupController::class,'addEvent']);
-Route::get('/overtimes/jquery/add-overtime', [OvertimeGroupController::class,'addOvertime']);
+Route::group(['middleware' => ['auth']], function () {
+    Route::get('/', function(){
+        return view('home');
+    });
+
+    // Auth Controller
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/logout', function () {
+        return redirect('/');
+    });
+
+    // Overtime Controller
+    Route::get('/overtimes', [OvertimeGroupController::class, 'index']);
+    Route::get('/overtimes/create', [OvertimeGroupController::class, 'create']);
+    Route::post('/overtimes/store', [OvertimeGroupController::class, 'store']);
+    Route::get('/overtimes/{overtimeGroup}/edit', [OvertimeGroupController::class, 'edit']);
+    Route::get('/overtimes/jquery/add-event/{increment}', [OvertimeGroupController::class, 'addEvent']);
+    Route::get('/overtimes/jquery/add-overtime', [OvertimeGroupController::class, 'addOvertime']);
+
+    Route::get('/result', [OvertimeGroupController::class, 'result']);
+
+    // Config Controller
+    Route::get('/configs', [ConfigController::class, 'index']);
+    Route::post('/configs/{config}', [ConfigController::class, 'update']);
+
+    Route::get('/profile', [UserController::class, 'profile']);
+    Route::patch('/users/{user}', [UserController::class, 'update']);
+
+});
+
+
