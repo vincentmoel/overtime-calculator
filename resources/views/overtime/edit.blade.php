@@ -10,7 +10,8 @@
 
 
 
-    <form action="/overtimes/store" method="POST" id="form-overtime">
+    <form action="/overtimes/{{ $data[0]['id'] }}" method="POST" id="form-overtime">
+        @method('PATCH')
         @csrf
         <div class="d-flex">
 

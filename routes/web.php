@@ -42,6 +42,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/overtimes/create', [OvertimeGroupController::class, 'create']);
     Route::post('/overtimes/store', [OvertimeGroupController::class, 'store']);
     Route::get('/overtimes/{overtimeGroup}/edit', [OvertimeGroupController::class, 'edit']);
+    Route::patch('/overtimes/{overtimeGroup}', [OvertimeGroupController::class,'update']);
+    Route::delete('/overtimes/{overtimeGroup}', [OvertimeGroupController::class,'destroy']);
     Route::get('/overtimes/jquery/add-event/{increment}', [OvertimeGroupController::class, 'addEvent']);
     Route::get('/overtimes/jquery/add-overtime', [OvertimeGroupController::class, 'addOvertime']);
 
@@ -55,5 +57,3 @@ Route::group(['middleware' => ['auth']], function () {
     Route::patch('/users/{user}', [UserController::class, 'update']);
 
 });
-
-

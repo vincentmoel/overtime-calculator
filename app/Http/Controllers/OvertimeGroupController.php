@@ -106,6 +106,7 @@ class OvertimeGroupController extends Controller
         foreach($overtimes as $overtime)
         {
             $arrTemp = [];
+            $arrTemp['id'] = $overtime->id;
             $arrTemp['name'] = $overtime->name;
             $arrTemp['month'] = $overtime->month;
             $arrTemp['year'] = $overtime->year;
@@ -145,7 +146,10 @@ class OvertimeGroupController extends Controller
      */
     public function update(Request $request, OvertimeGroup $overtimeGroup)
     {
-        //
+        $this->destroy($overtimeGroup);
+        $this->store($request);
+
+        return redirect('/overtimes');
     }
 
     /**
@@ -156,7 +160,12 @@ class OvertimeGroupController extends Controller
      */
     public function destroy(OvertimeGroup $overtimeGroup)
     {
-        //
+        // $overtimeGroup->delete();
+        $overtimes = OvertimeGroup::where('month',$overtimeGroup->month)->pluck('id');
+
+        Overtime::whereIn('overtime_group_id',$overtimes)->delete();
+        OvertimeGroup::whereIn('id', $overtimes)->delete();
+        
     }
 
 
