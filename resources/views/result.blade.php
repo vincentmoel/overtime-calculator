@@ -50,7 +50,7 @@
                 </div>
                 @foreach ($overtimes as $overtime)
                     <div class="d-flex">
-                        <div class="p-3 border border-dark text-center" style="min-width: 210px">
+                        <div class="p-2 border border-dark text-center" style="min-width: 210px">
                             {{ $overtime['name'] }}
                         </div>
                         <div class="" style="min-width: 252px">
@@ -86,7 +86,11 @@
 
                     </div>
                 @endforeach
+                
+            </div>
 
+            <div>
+                Total : {{ $totalOvertimeMoney }} - {{ $totalAdditionalMoney }} - {{ $totalAdditionalMoney+$totalOvertimeMoney }}
             </div>
 
             {{-- <div>

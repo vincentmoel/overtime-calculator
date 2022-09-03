@@ -169,10 +169,10 @@ class OvertimeGroupController extends Controller
     }
 
 
-    public function result()
+    public function result($month)
     {
         $overtimeGroups = OvertimeGroup::where('user_id',1)
-                            ->where('month',"Agustus")
+                            ->where('month',$month)
                             ->where('year',2022)
                             ->get();
         
@@ -183,6 +183,8 @@ class OvertimeGroupController extends Controller
 
         // dd($overtimes[0]->overtimes[0]->to);
 
+        $totalOvertimeMoney = 0;
+        $totalAdditionalMoney = 0;
         foreach($overtimeGroups as $overtimeGroup)
         {
             $mappedOvertime = array();
@@ -192,18 +194,21 @@ class OvertimeGroupController extends Controller
             $totalOvertime = $this->getTotalTime($overtimeGroup->overtimes, $overtimeGroup->is_sunday);
             $mappedOvertime['overtime'] = gmdate("H:i:s",$totalOvertime);
             $mappedOvertime['money'] = $this->getTotalOvertimeMoney($overtimeMoneyPerHour->value, $totalOvertime,$overtimeGroup->transport,$overtimeGroup->meal);
+            $totalOvertimeMoney += $mappedOvertime['money'];  
             $mappedOvertime['transport'] = $overtimeGroup->transport;
             $mappedOvertime['meal'] = $overtimeGroup->meal;
-
+            $totalAdditionalMoney += ($mappedOvertime['transport'] + $mappedOvertime['meal']); 
             array_push($arrOvertimes,$mappedOvertime);
         }
 
         $informations = array();
         $informations['period'] = $overtimeGroups[0]->month ." ". $overtimeGroups[0]->year;
         $informations['name']   = $overtimeGroups[0]->user->name;
-        return view('welcome',[
-            'informations'  => $informations,
-            'overtimes'     => $arrOvertimes
+        return view('result',[
+            'informations'          => $informations,
+            'overtimes'             => $arrOvertimes,
+            'totalOvertimeMoney'    => $totalOvertimeMoney,
+            'totalAdditionalMoney'  => $totalAdditionalMoney
         ]);
     }
 
