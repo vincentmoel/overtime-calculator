@@ -10,10 +10,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
     </script>
-    <title>Document</title>
+    <title>Lembur Bulan {{ $informations['period'] }}</title>
 </head>
 
-<body>
+<body class="p-3">
     <div style="min-width: 21cm; max-width: 21cm;">
         <header>
             <h3 class="text-center">Lembur Bulan {{ $informations['period'] }}</h3>
@@ -28,23 +28,23 @@
 
             <div class="mt-3" style="min-width: 21cm">
                 <div class="d-flex">
-                    <div class="flex-fill p-0 border border-dark p-2 text-center"
+                    <div class="flex-fill border border-dark p-2 text-center"
                         style="min-width: 210px; max-width:210px">
                         Nama Kegiatan
                     </div>
-                    <div class="flex-fill p-0 border border-dark p-2 text-center"
-                        style="min-width: 252px; max-width:252px">
+                    <div class="flex-fill border border-dark p-2 text-center"
+                        style="min-width: 231px; max-width:252px">
                         Date/Time
                     </div>
-                    <div class="flex-fill p-0 border border-dark p-2 text-center"
+                    <div class="flex-fill border border-dark p-2 text-center"
                         style="min-width: 100px; max-width:100px">
                         Lembur
                     </div>
-                    <div class="flex-fill p-0 border border-dark p-2 text-center"
-                        style="min-width: 80px; max-width:80px">
+                    <div class="flex-fill border border-dark p-2 text-center"
+                        style="min-width: 115px; max-width:115px">
                         Uang
                     </div>
-                    <div class="flex-fill p-0 border border-dark p-2 text-center">
+                    <div class="flex-fill border border-dark p-2 text-center">
                         Transport/Makan
                     </div>
                 </div>
@@ -53,7 +53,7 @@
                         <div class="p-2 border border-dark text-center" style="min-width: 210px">
                             {{ $overtime['name'] }}
                         </div>
-                        <div class="" style="min-width: 252px">
+                        <div class="" style="min-width: 231px">
                             @foreach ($overtime['detail'] as $time)
                                 <div class="p-1 border border-dark text-center">
                                     {{ $time['from'] }}
@@ -67,19 +67,22 @@
                         <div class="p-3 border border-dark" style="min-width: 100px">
                             {{ $overtime['overtime'] }}
                         </div>
-                        <div class="p-3 border border-dark" style="min-width: 80px">
-                            {{ $overtime['money'] }}
+                        <div class="p-3 border border-dark" style="min-width: 115px">
+                            {{ "Rp " . number_format($overtime['money'],0,',','.'); }}
+                            
 
                         </div>
                         <div class="w-100">
                             <div class="p-1 h-50 w-100 border border-dark text-center">
                                 @if ($overtime['transport'] != 0)
-                                    {{ $overtime['transport'] }}
+                                    {{ "Rp " . number_format($overtime['transport'],0,',','.'); }}
+
                                 @endif
                             </div>
                             <div class="p-1 h-50 w-100 border border-dark text-center">
                                 @if ($overtime['meal'] != 0)
-                                    {{ $overtime['meal'] }}
+                                    {{ "Rp " . number_format($overtime['meal'],0,',','.'); }}
+
                                 @endif
                             </div>
                         </div>
@@ -89,55 +92,27 @@
                 
             </div>
 
-            <div>
-                Total : {{ $totalOvertimeMoney }} - {{ $totalAdditionalMoney }} - {{ $totalAdditionalMoney+$totalOvertimeMoney }}
+            <div class="d-flex justify-content-end mt-2">
+                <div class="me-3 fw-bolder">
+                    Total
+                </div>
+                <div>
+                    <div class="d-flex ">
+                        <div class="text-center">
+                            {{ "Rp " . number_format($totalOvertimeMoney,0,',','.'); }}
+                        </div>
+                        <div>
+                            +
+                        </div>
+                        <div class="text-center">
+                            {{ "Rp " . number_format($totalAdditionalMoney,0,',','.'); }}
+                        </div>
+                    </div>
+                    <div class="fw-bolder">
+                        = {{ "Rp " . number_format($totalAdditionalMoney+$totalOvertimeMoney,0,',','.'); }}
+                    </div>
+                </div>
             </div>
-
-            {{-- <div>
-                <table class="table table-bordered border-dark">
-                    <thead>
-                        <tr class="text-center" style="background-color:#D9D9D9;">
-                            <th>Nama Kegiatan</th>
-                            <th>Date/Time</th>
-                            <th>Lembur</th>
-                            <th>Uang</th>
-                            <th>Transport + <br> Uang Makan</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($overtimes as $overtime)
-                            <tr>
-                                <td rowspan="6">{{ $overtime['name'] }}</td>
-                                <td>6/12/20222 6:00:00 AM</td>
-                                <td rowspan="6">{{ $overtime['overtime'] }}</td>
-                                <td rowspan="6">{{ $overtime['money'] }}</td>
-                                <td rowspan="1">4000</td>
-                            </tr>
-                            <tr>
-                                <td>6/12/20222 11:00:00 AM</td>
-                                <td rowspan="1">6000</td>
-                            </tr>
-                            <tr>
-                                <td>6/12/20222 11:00:00 AM</td>
-                                <td rowspan="1">6000</td>
-                            </tr>
-                            <tr>
-                                <td>6/12/20222 11:00:00 AM</td>
-                                <td rowspan="1">6000</td>
-                            </tr>
-                            <tr>
-                                <td>6/12/20222 11:00:00 AM</td>
-                                <td rowspan="1">6000</td>
-                            </tr>
-                            <tr>
-                                <td>6/12/20222 11:00:00 AM</td>
-                                <td rowspan="1">6000</td>
-                            </tr>
-                        @endforeach
-
-                    </tbody>
-                </table>
-            </div> --}}
         </div>
 
     </div>

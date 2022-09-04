@@ -27,7 +27,8 @@
                 <td>{{ $overtimeGroup->month }}</td>
                 <td>{{ $overtimeGroup->year }}</td>
                 <td>
-                    <a href="/overtimes/{{ $overtimeGroup->id }}/edit" class="btn btn-dark mb-1 mb-xxl-0"><i class="bi bi-pencil-square"></i></a>
+                    <a href="/result/{{ $overtimeGroup->month }}" target="_blank" class="btn btn-secondary mb-xxl-0"><i class="bi bi-file-earmark-arrow-down"></i></a>
+                    <a href="/overtimes/{{ $overtimeGroup->id }}/edit" class="btn btn-dark mb-xxl-0"><i class="bi bi-pencil-square"></i></a>
                     <form action="/overtimes/{{ $overtimeGroup->id }}" method="POST" class="d-inline" id="form-delete">
                         @method('DELETE')
                         @csrf
