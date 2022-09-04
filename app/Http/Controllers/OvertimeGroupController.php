@@ -172,6 +172,8 @@ class OvertimeGroupController extends Controller
 
         Overtime::whereIn('overtime_group_id', $overtimes)->delete();
         OvertimeGroup::whereIn('id', $overtimes)->delete();
+
+        return redirect('/overtimes');
     }
 
 

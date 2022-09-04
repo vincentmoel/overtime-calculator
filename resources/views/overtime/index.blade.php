@@ -32,7 +32,7 @@
                     <form action="/overtimes/{{ $overtimeGroup->id }}" method="POST" class="d-inline" id="form-delete">
                         @method('DELETE')
                         @csrf
-                        <button class="btn btn-danger"><i class="bi bi-trash3-fill"></i></button>
+                        <button class="btn btn-danger" onclick="return confirm('Are you sure you want to Delete Data?')"><i class="bi bi-trash3-fill"></i></button>
                     </form>
                 </td>
             </tr>
