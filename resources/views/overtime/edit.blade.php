@@ -83,16 +83,20 @@
             
                     <div id="overtime-wrapper-{{ $increment }}">
                         @foreach($d['overtimes'] as $overtime)
+                            @php
+                                $from = \DateTime::createFromFormat('Y-m-d H:i:s', $overtime['from'])->format($dateFormat);
+                                $to = \DateTime::createFromFormat('Y-m-d H:i:s', $overtime['to'])->format($dateFormat);
+                            @endphp
                             <div class="time-wrapper mb-2">
                                 <div class="separator mx-auto mb-3"></div>
                                 <div class="d-flex justify-content-center">
                                     <div class="mb-3 me-3">
                                         <label for="from" class="form-label">From</label>
-                                        <input type="text" id="from" name="from[]" class="form-control" value="{{ $overtime['from'] }}" style="max-width: 300px" required>
+                                        <input type="text" id="from" name="from[]" class="form-control" value="{{ $from }}" style="max-width: 300px" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="to" class="form-label">To</label>
-                                        <input type="text" id="to" class="form-control" name="to[]" value="{{ $overtime['to'] }}" style="max-width: 300px" required>
+                                        <input type="text" id="to" class="form-control" name="to[]" value="{{ $to }}" style="max-width: 300px" required>
                                     </div>
                                 </div>
                             </div>

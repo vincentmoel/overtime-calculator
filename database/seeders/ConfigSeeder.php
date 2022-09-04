@@ -45,8 +45,17 @@ class ConfigSeeder extends Seeder
             "alias"         => "Meal",
             "slug"          => "meal_money",
             "functionality" => "in-form",
-            "value"         => 7000,
+            "value"         => 6000,
             "description"   => "Uang makan"
+        ]);
+        
+        Config::create([
+            "name"          => "Date Format",
+            "alias"         => "Date Format",
+            "slug"          => "date_format",
+            "functionality" => "information",
+            "value"         => "m/d/Y h:i:s A",
+            "description"   => "Format tanggal yang diinputkan di form"
         ]);
 
 

@@ -41,11 +41,11 @@
                         Lembur
                     </div>
                     <div class="flex-fill border border-dark p-2 text-center"
-                        style="min-width: 115px; max-width:115px">
-                        Uang
+                        style="min-width: 135px; max-width:135px">
+                        Transport/Makan
                     </div>
                     <div class="flex-fill border border-dark p-2 text-center">
-                        Transport/Makan
+                        Uang
                     </div>
                 </div>
                 @foreach ($overtimes as $overtime)
@@ -67,12 +67,7 @@
                         <div class="p-3 border border-dark" style="min-width: 100px">
                             {{ $overtime['overtime'] }}
                         </div>
-                        <div class="p-3 border border-dark" style="min-width: 115px">
-                            {{ "Rp " . number_format($overtime['money'],0,',','.'); }}
-                            
-
-                        </div>
-                        <div class="w-100">
+                        <div class="" style="min-width: 135px">
                             <div class="p-1 h-50 w-100 border border-dark text-center">
                                 @if ($overtime['transport'] != 0)
                                     {{ "Rp " . number_format($overtime['transport'],0,',','.'); }}
@@ -85,6 +80,15 @@
 
                                 @endif
                             </div>
+
+                        </div>
+                        <div class="w-100">
+                            
+                            <div class="p-3 h-100 border border-dark">
+                                {{ "Rp " . number_format($overtime['money'],0,',','.'); }}
+                                
+    
+                            </div>
                         </div>
 
                     </div>
@@ -94,9 +98,9 @@
 
             <div class="d-flex justify-content-end mt-2">
                 <div class="me-3 fw-bolder">
-                    Total
+                    Total : {{ "Rp " . number_format($totalMoney,0,',','.'); }}
                 </div>
-                <div>
+                {{-- <div>
                     <div class="d-flex ">
                         <div class="text-center">
                             {{ "Rp " . number_format($totalOvertimeMoney,0,',','.'); }}
@@ -111,7 +115,7 @@
                     <div class="fw-bolder">
                         = {{ "Rp " . number_format($totalAdditionalMoney+$totalOvertimeMoney,0,',','.'); }}
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
 

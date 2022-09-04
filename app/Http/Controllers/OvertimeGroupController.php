@@ -16,13 +16,13 @@ class OvertimeGroupController extends Controller
      */
     public function index()
     {
-        $overtimeGroups = OvertimeGroup::where('user_id',auth()->user()->id)->groupBy('month','year')->get();
-        return view('overtime.index',[
+        $overtimeGroups = OvertimeGroup::where('user_id', auth()->user()->id)->groupBy('month', 'year')->get();
+        return view('overtime.index', [
             "overtimeGroups" => $overtimeGroups,
         ]);
     }
 
-    
+
 
     /**
      * Show the form for creating a new resource.
@@ -31,9 +31,9 @@ class OvertimeGroupController extends Controller
      */
     public function create()
     {
-        $config = Config::where('functionality','in-form')->get();
+        $config = Config::where('functionality', 'in-form')->get();
 
-        return view('overtime.create',[
+        return view('overtime.create', [
             "configs"        => $config
         ]);
     }
@@ -52,29 +52,37 @@ class OvertimeGroupController extends Controller
             'json'  => 'required'
         ]);
 
-        foreach(json_decode($request->json) as $detail)
-        {
+        $transportMoney = Config::where('slug','transport_money')->first()->value;
+        $mealMoney = Config::where('slug','meal_money')->first()->value;
+
+        foreach (json_decode($request->json) as $detail) {
             $overtimeGroup = OvertimeGroup::create([
                 "user_id"   => auth()->user()->id,
                 "month"     => $request->month,
                 "year"      => $request->year,
                 "name"      => $detail->name,
-                "transport" => $detail->transport_money ? 7000 : 0 ,
-                "meal"      => $detail->meal_money ? 5000 : 0,
+                "transport" => $detail->transport_money ? $transportMoney : 0,
+                "meal"      => $detail->meal_money ? $mealMoney : 0,
                 "is_sunday" => $detail->working_hour,
             ]);
 
-            foreach($detail->overtimes as $overtime)
-            {
+            foreach ($detail->overtimes as $overtime) {
+
                 Overtime::create([
                     "overtime_group_id" => $overtimeGroup->id,
-                    "from"              => $overtime->from,
-                    "to"                => $overtime->to,
+                    "from"              => $this->dateConvert($overtime->from),
+                    "to"                => $this->dateConvert($overtime->to),
                 ]);
             }
         }
 
         return redirect('/overtimes');
+    }
+
+    private function dateConvert($dateString)
+    {
+        $dateFormat = Config::where('slug','date_format')->first()->value;
+        return \DateTime::createFromFormat($dateFormat, $dateString)->format('Y-m-d H:i:s');
     }
 
     /**
@@ -96,15 +104,14 @@ class OvertimeGroupController extends Controller
      */
     public function edit(OvertimeGroup $overtimeGroup)
     {
-        $configs = Config::where('functionality','in-form')->get();
+        $configs = Config::where('functionality', 'in-form')->get();
 
         $arrOvertimes = [];
-        $overtimes = OvertimeGroup::where('month',$overtimeGroup->month)->get();
+        $overtimes = OvertimeGroup::where('month', $overtimeGroup->month)->get();
 
 
         // dd($overtimeGroup);
-        foreach($overtimes as $overtime)
-        {
+        foreach ($overtimes as $overtime) {
             $arrTemp = [];
             $arrTemp['id'] = $overtime->id;
             $arrTemp['name'] = $overtime->name;
@@ -114,15 +121,14 @@ class OvertimeGroupController extends Controller
             $arrTemp['transport_money'] = $overtime->transport;
             $arrTemp['meal_money'] = $overtime->meal;
 
-            $detailOvertime = Overtime::where('overtime_group_id',$overtime->id)->get();
+            $detailOvertime = Overtime::where('overtime_group_id', $overtime->id)->get();
 
             $arrOvertimeTemp = [];
-            foreach($detailOvertime as $detail)
-            {
+            foreach ($detailOvertime as $detail) {
                 $arrDetail = [];
                 $arrDetail['from'] = $detail->from;
                 $arrDetail['to'] = $detail->to;
-                array_push($arrOvertimeTemp,$arrDetail);
+                array_push($arrOvertimeTemp, $arrDetail);
             }
 
             $arrTemp['overtimes'] = $arrOvertimeTemp;
@@ -131,9 +137,10 @@ class OvertimeGroupController extends Controller
         }
 
         // dd($arrOvertimes);
-        return view('overtime.edit',[
-            "data"      => $arrOvertimes,
-            "configs"    => $configs
+        return view('overtime.edit', [
+            "data"          => $arrOvertimes,
+            "configs"       => $configs,
+            "dateFormat"    => Config::where('slug','date_format')->first()->value
         ]);
     }
 
@@ -161,66 +168,62 @@ class OvertimeGroupController extends Controller
     public function destroy(OvertimeGroup $overtimeGroup)
     {
         // $overtimeGroup->delete();
-        $overtimes = OvertimeGroup::where('month',$overtimeGroup->month)->pluck('id');
+        $overtimes = OvertimeGroup::where('month', $overtimeGroup->month)->pluck('id');
 
-        Overtime::whereIn('overtime_group_id',$overtimes)->delete();
+        Overtime::whereIn('overtime_group_id', $overtimes)->delete();
         OvertimeGroup::whereIn('id', $overtimes)->delete();
-        
     }
 
 
     public function result($month)
     {
-        $overtimeGroups = OvertimeGroup::where('user_id',1)
-                            ->where('month',$month)
-                            ->where('year',2022)
-                            ->get();
-        
-        $overtimeMoneyPerHour = Config::where('slug','money-per-hour')->first();
+        $overtimeGroups = OvertimeGroup::where('user_id', 1)
+            ->where('month', $month)
+            ->where('year', 2022)
+            ->get();
 
-        
+        $overtimeMoneyPerHour = Config::where('slug', 'money-per-hour')->first();
+
+
         $arrOvertimes = array();
 
         // dd($overtimes[0]->overtimes[0]->to);
 
-        $totalOvertimeMoney = 0;
+        $totalMoney = 0;
         $totalAdditionalMoney = 0;
-        foreach($overtimeGroups as $overtimeGroup)
-        {
+        foreach ($overtimeGroups as $overtimeGroup) {
             $mappedOvertime = array();
 
             $mappedOvertime['name'] = $overtimeGroup->name;
             $mappedOvertime['detail'] = $this->getOvertimeDetail($overtimeGroup);
             $totalOvertime = $this->getTotalTime($overtimeGroup->overtimes, $overtimeGroup->is_sunday);
-            $mappedOvertime['overtime'] = gmdate("H:i:s",$totalOvertime);
-            $mappedOvertime['money'] = $this->getTotalOvertimeMoney($overtimeMoneyPerHour->value, $totalOvertime,$overtimeGroup->transport,$overtimeGroup->meal);
-            $totalOvertimeMoney += $mappedOvertime['money'];  
+            $mappedOvertime['overtime'] = gmdate("H:i:s", $totalOvertime);
+            $mappedOvertime['money'] = $this->getTotalOvertimeMoney($overtimeMoneyPerHour->value, $totalOvertime, $overtimeGroup->transport, $overtimeGroup->meal);
+            $totalMoney += $mappedOvertime['money'];
             $mappedOvertime['transport'] = $overtimeGroup->transport;
             $mappedOvertime['meal'] = $overtimeGroup->meal;
-            $totalAdditionalMoney += ($mappedOvertime['transport'] + $mappedOvertime['meal']); 
-            array_push($arrOvertimes,$mappedOvertime);
+            $totalAdditionalMoney += ($mappedOvertime['transport'] + $mappedOvertime['meal']);
+            array_push($arrOvertimes, $mappedOvertime);
         }
 
         $informations = array();
-        $informations['period'] = $overtimeGroups[0]->month ." ". $overtimeGroups[0]->year;
+        $informations['period'] = $overtimeGroups[0]->month . " " . $overtimeGroups[0]->year;
         $informations['name']   = $overtimeGroups[0]->user->name;
-        return view('result',[
+        return view('result', [
             'informations'          => $informations,
             'overtimes'             => $arrOvertimes,
-            'totalOvertimeMoney'    => $totalOvertimeMoney,
-            'totalAdditionalMoney'  => $totalAdditionalMoney
+            'totalMoney'    => $totalMoney,
         ]);
     }
 
     public function getOvertimeDetail($overtimeGroup)
     {
         $arrDetails = array();
-        foreach($overtimeGroup->overtimes as $detail)
-        {
+        foreach ($overtimeGroup->overtimes as $detail) {
             $mappedDetail = array();
             $mappedDetail['from'] = $detail->from;
             $mappedDetail['to'] = $detail->to;
-            array_push($arrDetails,$mappedDetail);
+            array_push($arrDetails, $mappedDetail);
         }
         return $arrDetails;
     }
@@ -228,17 +231,15 @@ class OvertimeGroupController extends Controller
     public function getTotalTime($overtimeData, $isSunday)
     {
         $totalTime = 0;
-        foreach($overtimeData as $overtime)
-        {
+        foreach ($overtimeData as $overtime) {
             $time = (strtotime($overtime->to) - strtotime($overtime->from));
             $totalTime += $time;
         }
-        
-        if($isSunday)
-        {
-            $workingHour = Config::where('slug','working_hour')->first();
+
+        if ($isSunday) {
+            $workingHour = Config::where('slug', 'working_hour')->first();
             // dd($totalTime - ($workingHour->value*3600));
-            $totalTime -= ($workingHour->value*3600);
+            $totalTime -= ($workingHour->value * 3600);
         }
 
         return $totalTime;
@@ -247,19 +248,19 @@ class OvertimeGroupController extends Controller
     public function getTotalOvertimeMoney($overtimeMoneyPerHour, $totalOvertime, $transportMoney, $mealMoney)
     {
         $overtimeMoney = floor(($overtimeMoneyPerHour / 3600) * $totalOvertime);
-        return $overtimeMoney + $transportMoney + $mealMoney; 
+        return $overtimeMoney + $transportMoney + $mealMoney;
     }
 
     public function addEvent($increment)
     {
-        $config = Config::where('functionality','in-form')->get();
+        $config = Config::where('functionality', 'in-form')->get();
 
-        return view('overtime.eventfield',[
+        return view('overtime.eventfield', [
             "configs"        => $config,
             "increment"      => $increment
         ]);
     }
-    
+
     public function addOvertime()
     {
         return view('overtime.timefield');

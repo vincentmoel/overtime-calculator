@@ -19,7 +19,7 @@ class CreateConfigsTable extends Migration
             $table->string('alias')->nullable();
             $table->string('slug');
             $table->string('functionality');
-            $table->integer('value');
+            $table->string('value');
             $table->string('description');
             $table->timestamps();
         });
