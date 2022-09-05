@@ -33,7 +33,7 @@
                         Nama Kegiatan
                     </div>
                     <div class="flex-fill border border-dark p-2 text-center"
-                        style="min-width: 231px; max-width:252px">
+                        style="min-width: 231px; max-width:231px">
                         Date/Time
                     </div>
                     <div class="flex-fill border border-dark p-2 text-center"
