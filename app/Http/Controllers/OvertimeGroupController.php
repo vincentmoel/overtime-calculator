@@ -177,11 +177,11 @@ class OvertimeGroupController extends Controller
     }
 
 
-    public function result($month)
+    public function result($month, $year)
     {
         $overtimeGroups = OvertimeGroup::where('user_id', auth()->user()->id)
             ->where('month', $month)
-            ->where('year', date("Y"))
+            ->where('year', $year)
             ->get();
 
         $overtimeMoneyPerHour = Config::where('slug', 'money-per-hour')->first();
