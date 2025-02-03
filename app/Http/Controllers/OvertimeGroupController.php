@@ -168,7 +168,10 @@ class OvertimeGroupController extends Controller
     public function destroy(OvertimeGroup $overtimeGroup)
     {
         // $overtimeGroup->delete();
-        $overtimes = OvertimeGroup::where('month', $overtimeGroup->month)->pluck('id');
+        $overtimes = OvertimeGroup::where('month', $overtimeGroup->month)
+            ->where('year', $overtimeGroup->year)
+            ->where('user_id', auth()->user()->id)
+            ->pluck('id');
 
         Overtime::whereIn('overtime_group_id', $overtimes)->delete();
         OvertimeGroup::whereIn('id', $overtimes)->delete();
