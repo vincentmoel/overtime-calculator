@@ -107,7 +107,7 @@ class OvertimeGroupController extends Controller
         $configs = Config::where('functionality', 'in-form')->get();
 
         $arrOvertimes = [];
-        $overtimes = OvertimeGroup::where('month', $overtimeGroup->month)->where('user_id', auth()->user()->id)->get();
+        $overtimes = OvertimeGroup::where('month', $overtimeGroup->month)->where('year', $overtimeGroup->year)->where('user_id', auth()->user()->id)->get();
 
 
         // dd($overtimeGroup);
