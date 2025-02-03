@@ -47,7 +47,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/overtimes/jquery/add-event/{increment}', [OvertimeGroupController::class, 'addEvent']);
     Route::get('/overtimes/jquery/add-overtime', [OvertimeGroupController::class, 'addOvertime']);
 
-    Route::get('/result/{overtimeGroup}', [OvertimeGroupController::class, 'result']);
+    Route::get('/result/{month}/{year}', [OvertimeGroupController::class, 'result']);
 
     // Config Controller
     Route::get('/configs', [ConfigController::class, 'index']);
