@@ -16,7 +16,7 @@ class OvertimeGroupController extends Controller
      */
     public function index()
     {
-        $overtimeGroups = OvertimeGroup::where('user_id', auth()->user()->id)->groupBy('month', 'year')->get();
+        $overtimeGroups = OvertimeGroup::where('user_id', auth()->user()->id)->get();
         return view('overtime.index', [
             "overtimeGroups" => $overtimeGroups,
         ]);
@@ -168,20 +168,17 @@ class OvertimeGroupController extends Controller
     public function destroy(OvertimeGroup $overtimeGroup)
     {
         // $overtimeGroup->delete();
-        $overtimes = OvertimeGroup::where('month', $overtimeGroup->month)->pluck('id');
-
-        Overtime::whereIn('overtime_group_id', $overtimes)->delete();
-        OvertimeGroup::whereIn('id', $overtimes)->delete();
+        Overtime::where('overtime_group_id', $overtimeGroup->id)->delete();
+        OvertimeGroup::where('id', $overtimeGroup->id)->delete();
 
         return redirect('/overtimes');
     }
 
 
-    public function result($month, $year)
+    public function result($overtimeGroup)
     {
         $overtimeGroups = OvertimeGroup::where('user_id', auth()->user()->id)
-            ->where('month', $month)
-            ->where('year', $year)
+            ->where('id', $overtimeGroup)
             ->get();
 
         $overtimeMoneyPerHour = Config::where('slug', 'money-per-hour')->first();
